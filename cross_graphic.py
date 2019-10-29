@@ -56,6 +56,7 @@ for i in range(30):
 for i in range(30):
     a=[]
     wordLengthRev.append(a)
+	
 for item in voc: # fill wordLength: wordLength[i] is list of words with length == i or longer
     tabPos = item.find("\t")
     word = item[0:tabPos-1]
@@ -508,6 +509,9 @@ currI=0
 currJ=0
 currWord = ""
 currDir = ""
+openedCoord = []
+openedWords=[]
+
 
 def clickWordButton(coord):
 
@@ -520,14 +524,11 @@ def clickWordButton(coord):
     selectedWord=""
     #if array[j+1][i] in fullLettSet and array[j+2][i] in fullLettSet:
     if currNV>0 and currNH>0:
-        print("\n\n\n"+str(currI))
-        print(currJ) 
-        print(currWord) 
-        print(currDir+"\n\n\n")
-        
         if currDir == "vert":
             clr="blue"
             direct = "hor"
+            if ([i, j, direct] in openedCoord):
+                return
             dText = "по горизонтали:"
             currN = currNH-2
             currDescr = descrH
@@ -540,6 +541,8 @@ def clickWordButton(coord):
         else:
             clr="maroon"
             direct = "vert"
+            if ([i, j, direct] in openedCoord):
+                return
             dText = "по вертикали:"
             currN = currNV
             currDescr = descrV
@@ -555,9 +558,11 @@ def clickWordButton(coord):
         currDir = direct
         return
             
-    if currNV>0:   
+    if currNV>0:
         clr="maroon"
         direct = "vert"
+        if [i, j, direct] in openedCoord:
+            return
         dText = "по вертикали:"
         currN = currNV
         currDescr = descrV
@@ -572,6 +577,8 @@ def clickWordButton(coord):
     if currNH>0:
         clr="blue"
         direct = "hor"
+        if [i, j, direct] in openedCoord:
+            return
         dText = "по горизонтали:"
         currN = currNH-2
         currDescr = descrH
@@ -586,7 +593,7 @@ def clickWordButton(coord):
     currJ = j
     currWord = selectedWord
     currDir = direct
-
+    
           
       
 def fillWindow(firstRow=2, secRow=45):
@@ -655,7 +662,7 @@ def checkAnswer():
     global guessed
     global guessedLbl
 
-    if message.get().replace("ё", "е").replace("й", "и").upper() == currWord:
+    if message.get().replace("ё", "е").replace("й", "и").upper() == currWord and currWord not in openedWords:
         nr = 1
 
         if currDir == "vert":
@@ -672,7 +679,8 @@ def checkAnswer():
         message.set("")
         guessed+=1
         guessedLbl["text"]=(str(guessed))
-
+        openedCoord.append([currI,currJ,currDir])
+        openedWords.append(currWord)
 
 def helpAnswer():
     global currWord
@@ -680,7 +688,7 @@ def helpAnswer():
     global helped
     global helpedLbl
     
-    if True:
+    if currWord not in openedWords:
         nr = 1
 
         if currDir == "vert":
@@ -697,8 +705,10 @@ def helpAnswer():
         message.set("")     
         helped+=1
         helpedLbl["text"]=str(helped)
-        
-
+        openedCoord.append([currI,currJ,currDir])
+        openedWords.append(currWord)
+		
+		
 def fillDescr():
 
     hor = "По горизонтали: \n"
