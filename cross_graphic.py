@@ -528,7 +528,8 @@ def clickWordButton(coord):
             clr="blue"
             direct = "hor"
             if ([i, j, direct] in openedCoord):
-                return
+                #return
+                clr="silver"
             dText = "по горизонтали:"
             currN = currNH-2
             currDescr = descrH
@@ -542,7 +543,8 @@ def clickWordButton(coord):
             clr="maroon"
             direct = "vert"
             if ([i, j, direct] in openedCoord):
-                return
+                #return
+                clr="silver"
             dText = "по вертикали:"
             currN = currNV
             currDescr = descrV
@@ -562,7 +564,8 @@ def clickWordButton(coord):
         clr="maroon"
         direct = "vert"
         if [i, j, direct] in openedCoord:
-            return
+            #return
+            clr="silver"
         dText = "по вертикали:"
         currN = currNV
         currDescr = descrV
@@ -578,7 +581,8 @@ def clickWordButton(coord):
         clr="blue"
         direct = "hor"
         if [i, j, direct] in openedCoord:
-            return
+            #return
+            clr="silver"
         dText = "по горизонтали:"
         currN = currNH-2
         currDescr = descrH
