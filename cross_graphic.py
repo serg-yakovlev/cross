@@ -25,7 +25,7 @@ descrV = []
 fullLettSet = "-АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
 goodLettSet = "АБВГДЕИКЛМНОПРСТ"
 #vocPath = input("Path to vocabulary file")
-vocPath = "_vocabulary1.txt"
+vocPath = "_vocabulary.txt"
 
 
 #root = Tk()
@@ -682,7 +682,7 @@ def checkAnswer():
 
         message.set("")
         guessed+=1
-        guessedLbl["text"]=(str(guessed))
+        guessedLbl["text"] = 'guessed ' + str(guessed) + ' words'
         openedCoord.append([currI,currJ,currDir])
         openedWords.append(currWord)
 
@@ -704,11 +704,11 @@ def helpAnswer():
             while array[currJ][currI+nr] != ".":
                 label = Label(text=array[currJ][currI+nr], justify=CENTER, bd="0", font="Arial 9 bold", width=2, background="white", foreground="red") #893f45 9B5150 pady="0", padx="0",
                 label.grid(row=currJ, column=currI+nr)
-                nr+=1
+                nr += 1
 
         message.set("")     
         helped+=1
-        helpedLbl["text"]=str(helped)
+        helpedLbl["text"] = 'help used ' + str(helped) + ' times'
         openedCoord.append([currI,currJ,currDir])
         openedWords.append(currWord)
 		
