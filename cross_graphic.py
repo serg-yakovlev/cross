@@ -1,5 +1,6 @@
 from random import random , sample
 from tkinter import *
+from vocabulary import vocab
 
 
 descr = []
@@ -24,30 +25,19 @@ descrV = []
 
 fullLettSet = "-АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
 goodLettSet = "АБВГДЕИКЛМНОПРСТ"
-#vocPath = input("Path to vocabulary file")
-vocPath = "_vocabulary.txt"
-
-
-#root = Tk()
-#root.title("Crossword")
-#root.geometry("1500x1000")
-#root.resizable(width=True, height=True)
-#nrEntry = Entry(width="5")
-#nrEntry.grid(row=37,column=35, columnspan=2) #, rowspan=3)
 
 # creates array of "." 80x80 with numbers of rows and columns
 for i in range(1,80):
     row.append(i)
 array.append(row)
+
 for j in range(2,80):
     row=[j]
     for i in range(1,80):
         row.append(".")
     array.append(row)
 
-# read vocabulary file
-with open(vocPath) as file:
-   voc = [row.strip() for row in file]
+voc = vocab()
 
 # wordLength - create empty array
 for i in range(30):
@@ -58,7 +48,7 @@ for i in range(30):
     wordLengthRev.append(a)
 	
 for item in voc: # fill wordLength: wordLength[i] is list of words with length == i or longer
-    tabPos = item.find("\t")
+    tabPos = item.find(":")
     word = item[0:tabPos-1]
     description = item[tabPos:len(item)]
     vocabulary.append(word)
@@ -400,6 +390,7 @@ def rightWing(iniRow, iniCol):
 
 descr1 = []
 dString1=[]
+
 def printShortDescr():
     for d in descr:
         for nr in range(10):
@@ -421,15 +412,11 @@ def printShortDescr():
         dString.append(newText)
         i+=1
     dString.sort()
-
-   
-    print("По горизонтали:\n")
-    #dString1.append("По горизонтали:")
-
+    # print("По горизонтали:\n")
     i=1
     for item in dString:
         if item[0:3]=="hor":
-            print(str(i)+"  "+item[item.find("&&&")+3:])
+            # print(str(i)+"  "+item[item.find("&&&")+3:])
             dString1.append(str(i)+"  "+item[item.find("&&&")+3:])
             descrH.append(item[item.find("&&&")+3:])
             i+=1
@@ -437,37 +424,15 @@ def printShortDescr():
             vert = i+1
             break
     i=1
-    print("\nПо вертикали:\n")
-    #dString1.append("По вертикали:")
+    # print("\nПо вертикали:\n")
     for item in dString[vert-3:]:
-            print(str(i-1)+"  "+item[item.find("&&&")+3:])
+            # print(str(i-1)+"  "+item[item.find("&&&")+3:])
             dString1.append(str(i-1)+"  "+item[item.find("&&&")+3:])
             descrV.append(item[item.find("&&&")+3:])
             i+=1
 
 
 def printArray(firstRow, lastRow):
-  #  for j in range(secRow+1):
-  #      for i in range(0, secRow+1):
-  #          if i<firstRow or j<firstRow:
-  #              fnt="Arial 9 bold"
-  #              bckgr="white" #113f45"
-  #              frgr="#555" #fff"
-  #          else:
-  #              fnt="Arial 11 bold"
-  #              bckgr="white" #113f45"
-  #              frgr="#555" #fff"
-
-           # if array[j][i]!= ".":
-           #     label = Label(text=array[j][i], justify=CENTER, bd="0", font=fnt, width=2, background=bckgr, foreground=frgr) #893f45 9B5150 pady="0", padx="0",
-           #     label.grid(row=j, column=i)
-           # else:
-           #     if (array[j+1][i] in fullLettSet and array[j+2][i] in fullLettSet)  or (array[j][i+1] in fullLettSet and array[j][i+2] in fullLettSet):
-           #         btn = Button(text=str(j+1)+":"+str(i+1),  width="2",height="2", font="Arial 5", command=clickWordButton, background="maroon", foreground="white")
-           #         btn.grid(row=j, column=i)
-    #btn = Button(text="Get description",  width="13",height="3", font="Arial 10", command=clickGetFullDescr) #, background="#ddd", foreground="black",)
-    #btn.grid(row=38, column=35, columnspan=6, rowspan=4)
-
     for string in array[firstRow:lastRow]:
         strOutput=""
         for symb in string[firstRow:lastRow]:
@@ -478,7 +443,7 @@ def printArray(firstRow, lastRow):
             else:
                 symb=" "+str(symb)+" "
             strOutput=strOutput+str(symb)
-        print(strOutput)#+"\n")
+        # print(strOutput)
 
 
 def clickGetFullDescr():
@@ -488,10 +453,6 @@ def clickGetFullDescr():
     descrV = str(nr) + "_" + descrByNr(nr)[1]
     descrH = descrH[:80].ljust(wdth,"_") + "\n" + descrH[80:160].ljust(wdth,"_") + "\n" + descrH[160:240].ljust(wdth,"_")
     descrV = descrV[:80].ljust(wdth,"_") + "\n" + descrV[80:160].ljust(wdth,"_") + "\n" + descrV[160:240].ljust(wdth,"_")
-    #label = Label(text=descrH, justify=LEFT, bd="0", width=wdth, height="3", font="Arial 10", background="white", foreground="black") #893f45 9B5150 pady="0", padx="0",
-    #label.grid(row=36,  column=1, columnspan=35, rowspan=3)
-    #label = Label(text=descrV, justify=LEFT, bd="0", width=wdth, height="3", font="Arial 10", background="white", foreground="black") #893f45 9B5150 pady="0", padx="0",
-    #label.grid(row=39,  column=1, columnspan=35, rowspan=3)
 
 def descrByNr(nr):
 	return(["По горизонтали: " + dString[int(nr)-1][23::], "По вертикали: " + dString[int(nr)+hL[0]-2][23::]])
@@ -721,7 +682,6 @@ def fillDescr():
     i=1
     for item in dString:
         if item[0:3]=="hor":
-            #hor = hor + "(" +str(i) +")" + item[21:50]+">> ("+item[11:16]+")\n"
             hor = hor + dString1[i-1][:30] + "  " + item[11:16]+ "\n"
             i+=1
         else:
@@ -731,19 +691,11 @@ def fillDescr():
     hL.append(horLen)
     i=1
     for item in dString[horLen-1:int((len(dString)-3)/2)]:
-        #vertB = vertB +"(" +str(i) +")" + item[21:50]+">> ("+item[11:16]+")\n"
         vertB = vertB + dString1[horLen + i - 1][:30]  + "  " + item[11:16]+ "\n"
         i+=1
     for item in dString[horLen+i-2:len(dString)]:
-        #vertR = vertR +"(" +str(i) +")" + item[21:50]+">> ("+item[11:16]+")\n"
         vertR = vertR + dString1[horLen + i - 1][:30]  + "  " + item[11:16]+ "\n"
         i+=1
-
-    #print("leftbox\n")
-    #print(hor)
-    #print(vertB)
-    #print("rightbox\n")
-    #print(vertR)
     
     descrList1 = hor + vertB
     descrList2 = vertR   
